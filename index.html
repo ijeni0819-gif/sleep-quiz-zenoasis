@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>睡眠人格测试 — ZENOASIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-deep:#0B0F1E;--bg-mid:#121836;
+  --glass-bg:rgba(15,23,42,.6);--glass-border:rgba(167,139,250,.18);
+  --purple-mid:#7C3AED;--purple-deep:#5B21B6;--purple-light:#A78BFA;--purple-soft:#C4B5FD;
+  --blue-mid:#3B82F6;--blue-deep:#1E40AF;
+  --accent-pink:#F15BB5;--accent-cyan:#22D3EE;
+  --text-primary:#F1F0FB;--text-secondary:rgba(241,240,251,.65);--text-muted:rgba(241,240,251,.4);
+}
+html,body{font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-deep);color:var(--text-primary);min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;user-select:none}
+body{background:linear-gradient(165deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#1a1040 100%)}
+
+/* ═══ PARTICLES ═══ */
+#particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+/* ═══ GLOW ORBS ═══ */
+.glow-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.glow-orb-1{width:300px;height:300px;background:radial-gradient(circle,rgba(124,58,237,.12),transparent 70%);top:10%;left:-20%;animation:orb-drift 12s ease-in-out infinite}
+.glow-orb-2{width:250px;height:250px;background:radial-gradient(circle,rgba(59,130,246,.08),transparent 70%);bottom:20%;right:-15%;animation:orb-drift 15s ease-in-out infinite reverse}
+@keyframes orb-drift{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-30px)}}
+
+/* ═══ APP ═══ */
+#app{position:relative;z-index:1;max-width:430px;margin:0 auto;min-height:100dvh;overflow:hidden}
+.page{position:absolute;top:0;left:0;width:100%;min-height:100dvh;padding:0 24px;display:flex;flex-direction:column;opacity:0;transform:translateX(60px);transition:all .45s cubic-bezier(.22,1,.36,1);pointer-events:none;will-change:transform,opacity}
+.page.active{opacity:1;transform:translateX(0);pointer-events:auto;position:relative}
+.page.exit-left{opacity:0;transform:translateX(-60px);pointer-events:none;position:absolute}
+.page.exit-right{opacity:0;transform:translateX(60px);pointer-events:none;position:absolute}
+
+/* ═══ WELCOME ═══ */
+.welcome-brand{text-align:center;padding-top:12vh}
+.brand-logo{font-size:13px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--purple-light);margin-bottom:4px}
+.brand-cn{font-size:11px;font-weight:300;color:var(--text-muted);letter-spacing:2px}
+.welcome-hero{text-align:center;margin-top:8vh}
+.hero-emoji{font-size:64px;line-height:1;margin-bottom:20px;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-title{font-size:28px;font-weight:900;line-height:1.35;background:linear-gradient(135deg,var(--text-primary) 0%,var(--purple-soft) 50%,var(--accent-cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.hero-sub{font-size:14px;color:var(--text-secondary);line-height:1.6;max-width:280px;margin:0 auto}
+.welcome-meta{display:flex;justify-content:center;gap:24px;margin-top:36px}
+.meta-item{text-align:center}
+.meta-num{font-size:22px;font-weight:700;color:var(--purple-light)}
+.meta-label{font-size:11px;color:var(--text-muted);margin-top:2px}
+.welcome-cta{margin-top:auto;padding-bottom:48px;padding-top:40px}
+
+/* ═══ BUTTONS ═══ */
+.btn-primary{width:100%;padding:16px 32px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--purple-mid) 0%,var(--purple-deep) 50%,var(--blue-deep) 100%);color:#fff;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s,box-shadow .3s;box-shadow:0 8px 32px rgba(124,58,237,.35),inset 0 1px 0 rgba(255,255,255,.1)}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 60%);pointer-events:none}
+.btn-primary:active{transform:scale(.97);box-shadow:0 4px 16px rgba(124,58,237,.3)}
+
+/* ═══ QUIZ ═══ */
+.quiz-header{padding-top:56px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.btn-back{width:36px;height:36px;border:1.5px solid var(--glass-border);border-radius:10px;background:var(--glass-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--text-secondary);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0}
+.btn-back:active{transform:scale(.92)}
+.progress-wrap{flex:1;height:6px;background:rgba(167,139,250,.12);border-radius:3px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--purple-mid),var(--accent-cyan));border-radius:3px;transition:width .5s cubic-bezier(.22,1,.36,1);box-shadow:0 0 12px rgba(124,58,237,.5)}
+.question-num{font-size:12px;color:var(--text-muted);font-weight:500;min-width:32px;text-align:right}
+.quiz-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 0 40px;min-height:70dvh}
+.question-text{font-size:22px;font-weight:700;line-height:1.45;margin-bottom:32px;min-height:64px}
+.option-list{display:flex;flex-direction:column;gap:12px}
+.option-btn{width:100%;text-align:left;padding:16px 20px;border:1.5px solid var(--glass-border);border-radius:14px;background:var(--glass-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--text-primary);font-size:15px;font-weight:400;font-family:inherit;line-height:1.5;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.option-btn:active{transform:scale(.97)}
+.option-btn.selected{border-color:var(--purple-mid);background:rgba(124,58,237,.22)}
+.opt-letter{display:inline-block;width:22px;height:22px;border-radius:6px;background:rgba(167,139,250,.15);color:var(--purple-light);font-size:12px;font-weight:700;text-align:center;line-height:22px;margin-right:10px;flex-shrink:0;position:relative;z-index:1}
+.option-btn.selected .opt-letter{background:var(--purple-mid);color:#fff}
+.opt-text{position:relative;z-index:1}
+
+/* ═══ LOADING ═══ */
+.loading-page{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100dvh}
+.loading-moon{font-size:80px;animation:pulse-glow 2s ease-in-out infinite;margin-bottom:32px}
+@keyframes pulse-glow{0%,100%{transform:scale(1);filter:drop-shadow(0 0 20px rgba(167,139,250,.4))}50%{transform:scale(1.08);filter:drop-shadow(0 0 40px rgba(167,139,250,.7))}}
+.loading-text{font-size:17px;font-weight:500;color:var(--text-secondary);margin-bottom:16px}
+.loading-dots{display:flex;gap:8px;justify-content:center}
+.loading-dots span{width:8px;height:8px;border-radius:50%;background:var(--purple-light);animation:dot-bounce 1.4s ease-in-out infinite}
+.loading-dots span:nth-child(2){animation-delay:.16s}
+.loading-dots span:nth-child(3){animation-delay:.32s}
+@keyframes dot-bounce{0%,80%,100%{transform:scale(.6);opacity:.3}40%{transform:scale(1);opacity:1}}
+
+/* ═══ RESULT ═══ */
+.result-page{padding-bottom:60px}
+.result-hero{text-align:center;padding-top:56px;margin-bottom:8px}
+.result-emoji{font-size:72px;line-height:1;margin-bottom:16px;animation:float 4s ease-in-out infinite}
+.result-name{font-size:30px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--text-primary),var(--purple-soft));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.result-tagline{font-size:15px;color:var(--text-secondary);line-height:1.5}
+.result-section{margin-top:28px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple-light);margin-bottom:12px}
+.result-profile{font-size:15px;line-height:1.8;color:var(--text-secondary);padding:20px;border-radius:16px;background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border)}
+.tip-card{padding:18px 20px;border-radius:14px;background:var(--glass-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--glass-border);margin-bottom:10px}
+.tip-num{display:inline-block;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--purple-mid),var(--blue-mid));color:#fff;font-size:12px;font-weight:700;text-align:center;line-height:24px;margin-right:8px;vertical-align:middle}
+.tip-text{font-size:14px;line-height:1.7;color:var(--text-secondary);display:inline}
+.product-card{margin-top:32px;padding:24px 20px;border-radius:18px;background:linear-gradient(135deg,rgba(91,33,182,.2),rgba(30,64,175,.15));border:1px solid rgba(167,139,250,.25);position:relative;overflow:hidden}
+.product-card::before{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%);pointer-events:none}
+.product-label{font-size:11px;font-weight:500;color:var(--accent-cyan);letter-spacing:1px;margin-bottom:8px}
+.product-desc{font-size:13px;line-height:1.7;color:var(--text-secondary);position:relative}
+.result-actions{margin-top:36px;display:flex;flex-direction:column;gap:12px}
+.btn-share{width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--purple-mid),var(--blue-mid));color:#fff;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .2s;box-shadow:0 6px 24px rgba(124,58,237,.3)}
+.btn-share:active{transform:scale(.97)}
+.btn-retake{width:100%;padding:14px;border:1.5px solid var(--glass-border);border-radius:14px;background:transparent;color:var(--text-secondary);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .2s}
+.btn-retake:active{transform:scale(.97);background:rgba(91,33,182,.1)}
+.disclaimer{text-align:center;font-size:11px;color:var(--text-muted);margin-top:24px;line-height:1.6;padding:0 8px}
+
+/* ═══ SHARE OVERLAY ═══ */
+.share-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;opacity:0;pointer-events:none;transition:opacity .3s}
+.share-overlay.visible{opacity:1;pointer-events:auto}
+.share-card-wrap{width:100%;max-width:340px;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);margin-bottom:24px}
+.share-card-wrap canvas{width:100%;height:auto;display:block}
+.share-hint{font-size:13px;color:var(--text-secondary);margin-bottom:20px;text-align:center}
+.share-close{padding:12px 40px;border:1.5px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;font-size:14px;font-family:inherit;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="glow-orb glow-orb-1"></div>
+<div class="glow-orb glow-orb-2"></div>
+<canvas id="particles-canvas"></canvas>
+
+<div id="app">
+  <div id="page-welcome" class="page active">
+    <div class="welcome-brand">
+      <div class="brand-logo">ZENOASIS</div>
+      <div class="brand-cn">悟昕科技</div>
+    </div>
+    <div class="welcome-hero">
+      <div class="hero-emoji">🌙</div>
+      <h1 class="hero-title">你的睡眠人格<br>是什么？</h1>
+      <p class="hero-sub">10 个小问题，找到你专属的睡眠画像<br>以及属于你的改善方案</p>
+    </div>
+    <div class="welcome-meta">
+      <div class="meta-item"><div class="meta-num">10</div><div class="meta-label">道题目</div></div>
+      <div class="meta-item"><div class="meta-num">2</div><div class="meta-label">分钟完成</div></div>
+      <div class="meta-item"><div class="meta-num">6</div><div class="meta-label">种人格</div></div>
+    </div>
+    <div class="welcome-cta">
+      <button class="btn-primary" onclick="startQuiz()">开始测试</button>
+    </div>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <div id="page-loading" class="page loading-page">
+    <div class="loading-moon">🌙</div>
+    <div class="loading-text">正在分析你的睡眠人格...</div>
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+  </div>
+
+  <div id="page-result" class="page result-page"></div>
+</div>
+
+<div id="share-overlay" class="share-overlay">
+  <div class="share-card-wrap"><canvas id="share-canvas"></canvas></div>
+  <div class="share-hint">长按保存图片，分享到朋友圈</div>
+  <button class="share-close" onclick="closeShare()">关闭</button>
+</div>
+
+<script>
+const QUESTIONS=[
+  {q:"你通常几点睡觉？",opts:["22:00 之前","22:00 – 24:00","24:00 – 2:00","凌晨 2:00 以后"],
+   scores:[[0,0,0,0,0,1],[0,0,0,1,0,0],[3,0,0,0,1,1],[5,1,0,0,0,1]]},
+  {q:"躺在床上后，你一般多久能睡着？",opts:["10 分钟以内","10 – 30 分钟","30 – 60 分钟","超过 1 小时"],
+   scores:[[0,0,0,0,0,1],[0,0,1,1,0,0],[1,1,0,0,3,1],[2,2,0,0,3,1]]},
+  {q:"夜里你会醒来几次？",opts:["基本不醒","醒 1 次，很快能再睡","醒 1–2 次，要好一会儿才睡着","经常醒，翻来覆去"],
+   scores:[[0,0,0,0,0,0],[0,0,1,1,0,0],[0,0,3,1,1,1],[0,0,5,1,1,2]]},
+  {q:"睡前你最常做什么？",opts:["看书 / 听音乐 / 泡脚","刷刷手机，会控制时间","刷手机 / 追剧，停不下来","工作 / 回消息 / 想事情"],
+   scores:[[0,0,0,0,0,0],[1,0,0,0,0,1],[3,0,0,0,1,1],[1,3,0,0,3,1]]},
+  {q:"躺下后，你的脑子安静吗？",opts:["很快就能放空","会想一些事，但能慢慢平静","各种事情转来转去","完全停不下来，越想越清醒"],
+   scores:[[0,0,0,0,0,0],[0,1,0,0,0,1],[2,3,0,0,2,1],[3,5,0,0,3,1]]},
+  {q:"早上起来你觉得精神怎么样？",opts:["精神饱满","还行，需要缓一会儿","明显没睡够","越睡越累"],
+   scores:[[0,0,0,0,0,0],[0,0,0,1,0,1],[0,0,3,3,1,3],[0,0,2,3,1,5]]},
+  {q:"你白天需要靠什么撑过一天？",opts:["不太需要","下午来杯咖啡","全靠咖啡续命","咖啡 + 午睡，缺一不可"],
+   scores:[[0,0,0,0,0,0],[0,0,0,2,0,1],[0,0,1,3,1,2],[0,0,1,5,1,3]]},
+  {q:"你的作息规律吗？",opts:["非常规律，每天差不多","工作日规律，周末会晚睡","差不多，偶尔不规律","完全看心情，没有固定时间"],
+   scores:[[0,0,0,0,0,0],[1,0,0,1,0,1],[1,0,0,1,0,2],[4,1,0,1,0,2]]},
+  {q:"你觉得自己睡眠最大的困扰是什么？",opts:["没什么困扰","入睡太慢","睡太浅 / 容易醒","睡很久还是累"],
+   scores:[[0,0,0,0,0,0],[1,1,0,0,2,0],[0,0,4,1,1,1],[0,0,1,2,0,5]]},
+  {q:"如果有一种超能力你最想要——",opts:["沾枕头就睡着","一觉到天亮不醒","睡 4 小时 = 睡 8 小时","随时随地秒睡"],
+   scores:[[0,1,0,0,2,0],[0,0,3,1,1,1],[1,0,1,3,0,4],[4,1,0,1,2,2]]}
+];
+
+const PERSONALITIES=[
+  {id:"nightowl",emoji:"🌙",name:"夜行者",tagline:"你的生物钟，被调到了另一个时区",color1:"#7C3AED",color2:"#3B82F6",
+   profile:"你不爱早睡，不是因为不困，而是因为夜晚让你觉得自由。白天的喧嚣退去后，你终于有了属于自己的时间。这种“报复性熬夜”其实是一种心理补偿——你在用清醒守护白天被压缩的自我。但长期下来，生物钟的后移让你越来越难在“正常时间”入睡，形成了恶性循环。",
+   tips:["每天提前 15 分钟上床，用渐进式调整替代强制早睡","睡前 1 小时调暗灯光，给大脑发送“该休息了”的信号","白天多接触自然光，帮助校准你的生物钟"],
+   product:"悟昕的脑电监测可以帮你了解自己真实的入睡窗口期，配合 CES 干预和舒缓音波，在你最可能入睡的时间段创造理想的睡眠条件。"},
+  {id:"overthinker",emoji:"🧠",name:"思考者",tagline:"你的大脑，在该关机的时候还在全速运转",color1:"#8B5CF6",color2:"#F15BB5",
+   profile:"躺下是你一天中最忙的时刻。白天没来得及想的事，晚上全部涌上来。你会反复回放今天的对话，提前焦虑明天的任务，甚至开始思考人生的意义。你的大脑像一台没有关机键的电脑，即使身体已经很疲惫了，思维却越来越活跃。",
+   tips:["睡前做一次“大脑清空”——把想法写在纸上，告诉自己明天再处理","尝试 4-7-8 呼吸法：吸气 4 秒，屏息 7 秒，呼气 8 秒","用白噪音或冥想音频作为“思维锚点”，让注意力有处安放"],
+   product:"悟昕的音波干预功能可以播放经过设计的舒缓音频，帮助你的大脑从 β 波（活跃状态）过渡到 α 波和 θ 波（放松和入睡状态），让你不再和自己的思绪搏斗。"},
+  {id:"lightsleeper",emoji:"🫧",name:"浅眠人",tagline:"你的睡眠像一层薄冰，一碰就碎",color1:"#22D3EE",color2:"#3B82F6",
+   profile:"你睡觉很“精”——任何风吹草动都能把你惊醒。室友翻身、窗外的车声、甚至空调的风向变化，都可能打断你的睡眠。问题是你不像有些人醒了能马上睡回去，你一旦醒来就很难再入睡。长期浅睡让你的深睡比例偏低，身体得不到真正的修复。",
+   tips:["投资好的耳塞和遮光窗帘，降低环境干扰","醒来后不要看手机，保持闭眼尝试再次入睡","白天适当运动增加深睡比例，但避免睡前剧烈运动"],
+   product:"悟昕的脑电监测可以精确追踪你的深睡比例和睡眠结构，配合 CES 微电流干预帮助大脑进入更深的睡眠阶段，让你睡得更“沉”一点。"},
+  {id:"alarmwarrior",emoji:"⏰",name:"闹钟战士",tagline:"你不是没睡够，你是没睡对",color1:"#F59E0B",color2:"#EF4444",
+   profile:"你每天被闹钟从梦中拽出来，靠意志力把自己从床上拖起来。白天像行尸走肉一样靠咖啡撑着，到了下午就开始犯困。你可能觉得自己只是“没睡够”，但问题可能不在时间长短——你的睡眠质量本身就不高，深睡太少，浅睡太多，身体一直在“半休息”状态。",
+   tips:["关注睡眠质量而非时长，7 小时高质量睡眠胜过 10 小时低质量","用固定起床时间（包括周末）来稳定生物钟","睡前避免酒精，它会严重破坏深睡结构"],
+   product:"悟昕可以帮你量化深睡比例和睡眠效率，通过智能干预提升深睡质量。很多用户反馈，在使用一段时间后，起床时的清醒感明显改善，不再那么依赖闹钟。"},
+  {id:"tenseone",emoji:"😰",name:"紧绷人",tagline:"你的身体在该休息的时候，还在值班",color1:"#EC4899",color2:"#8B5CF6",
+   profile:"你躺下了，但身体并没有真的放松。肩膀是紧的，下颌是咬着的，心跳比白天快那么一点点。你可能自己都没意识到，一整天的压力反应在夜间并没有消退。你的神经系统还处于“战斗或逃跑”模式，身体在告诉你：还没安全呢，不能放松。",
+   tips:["睡前做一次全身扫描：从脚趾到头顶，逐个部位感受并释放紧张","洗个热水澡，利用体温下降的过程诱导睡意","减少睡前的刺激性信息摄入（激烈讨论、刺激新闻等）"],
+   product:"悟昕的 CES（经皮电刺激）技术可以帮助激活副交感神经，让身体从“紧绷模式”切换到“休息模式”。配合呼吸引导音频，帮你完成从身体到心理的全面放松。"},
+  {id:"daytimezombie",emoji:"🎭",name:"白天型",tagline:"你睡够了时间，却没买到质量",color1:"#6366F1",color2:"#22D3EE",
+   profile:"你觉得自己睡眠时间挺长的，但每天醒来还是无精打采。别人说“你就是睡太多了”，但你知道问题不在这里。你的睡眠可能缺少深睡和 REM 睡眠的关键阶段，大量时间花在了浅睡上。就像吃了一大碗零食却没吃到正餐——量够了，营养没到位。",
+   tips:["不要试图用“多睡”来补偿，固定作息比延长睡眠更重要","睡前避免高碳水饮食，它会干扰深度睡眠","保持卧室温度在 18–22°C，凉爽环境有利于深睡"],
+   product:"悟昕的脑电监测可以告诉你，你的睡眠到底“营养”够不够。通过追踪每晚的深睡和 REM 比例，配合个性化干预方案，帮你把睡眠从“凑时间”变成“高质量修复”。"}
+];
+
+let currentPage='welcome',currentQuestion=0,answers=[],resultPersonality=null;
+
+/* ═══ PARTICLES ═══ */
+function initParticles(){
+  const c=document.getElementById('particles-canvas'),ctx=c.getContext('2d');
+  let ps=[],w,h;
+  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}
+  function create(){
+    ps=[];const n=Math.floor(w*h/12000);
+    for(let i=0;i<n;i++)ps.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.5,dx:(Math.random()-.5)*.15,dy:(Math.random()-.5)*.1-.05,a:Math.random()*.5+.1,p:Math.random()*Math.PI*2});
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    ps.forEach(p=>{
+      p.x+=p.dx;p.y+=p.dy;p.p+=.008;
+      if(p.x<-10)p.x=w+10;if(p.x>w+10)p.x=-10;if(p.y<-10)p.y=h+10;if(p.y>h+10)p.y=-10;
+      const al=p.a*(.6+.4*Math.sin(p.p));
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(167,139,250,${al})`;ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();create();draw();
+  window.addEventListener('resize',()=>{resize();create()});
+}
+
+/* ═══ NAVIGATION ═══ */
+function showPage(id,dir){
+  const old=document.querySelector('.page.active'),nw=document.getElementById(id);
+  if(!nw)return;
+  if(old&&old!==nw){
+    old.classList.remove('active');
+    old.classList.add(dir==='forward'?'exit-left':'exit-right');
+    setTimeout(()=>{old.classList.remove('exit-left','exit-right');old.style.position='absolute'},500);
+  }
+  nw.style.position='relative';void nw.offsetHeight;nw.classList.add('active');
+  currentPage=id.replace('page-','');
+}
+function startQuiz(){currentQuestion=0;answers=[];buildQuiz();showPage('page-q0','forward')}
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');c.innerHTML='';
+  QUESTIONS.forEach((q,i)=>{
+    const d=document.createElement('div');d.id=`page-q${i}`;d.className='page';
+    const pct=(i/QUESTIONS.length*100).toFixed(0);
+    const back=i===0?`<button class="btn-back" onclick="showPage('page-welcome','back')">←</button>`:`<button class="btn-back" onclick="goToQ(${i-1})">←</button>`;
+    d.innerHTML=`<div class="quiz-header">${back}<div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div><div class="question-num">${i+1}/10</div></div><div class="quiz-body"><div class="question-text">${q.q}</div><div class="option-list">${q.opts.map((o,j)=>`<button class="option-btn" onclick="selectOpt(${i},${j},this)"><span class="opt-letter">${'ABCD'[j]}</span><span class="opt-text">${o}</span></button>`).join('')}</div></div>`;
+    c.appendChild(d);
+  });
+}
+function selectOpt(qi,oi,btn){
+  const sibs=btn.parentElement.querySelectorAll('.option-btn');sibs.forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');
+  answers[qi]=oi;
+  setTimeout(()=>{qi<QUESTIONS.length-1?goToQ(qi+1):showLoading()},350);
+}
+function goToQ(i){
+  currentQuestion=i;
+  const pg=document.getElementById(`page-q${i}`);
+  if(pg){const bar=pg.querySelector('.progress-bar');if(bar)bar.style.width=`${(i/QUESTIONS.length*100).toFixed(0)}%`}
+  showPage(`page-q${i}`,'forward');
+}
+
+/* ═══ SCORING ═══ */
+function calcResult(){
+  const t=[0,0,0,0,0,0];
+  QUESTIONS.forEach((q,qi)=>{const a=answers[qi];if(a!==undefined&&q.scores[a])q.scores[a].forEach((s,pi)=>{t[pi]+=s})});
+  let mx=-1,mi=0;t.forEach((s,i)=>{if(s>mx){mx=s;mi=i}});
+  return PERSONALITIES[mi];
+}
+
+/* ═══ LOADING & RESULT ═══ */
+function showLoading(){
+  showPage('page-loading','forward');
+  setTimeout(()=>{resultPersonality=calcResult();renderResult(resultPersonality);showPage('page-result','forward')},2800);
+}
+function renderResult(p){
+  document.getElementById('page-result').innerHTML=`
+    <div class="result-hero"><div class="result-emoji">${p.emoji}</div><div class="result-name">${p.name}</div><div class="result-tagline">"${p.tagline}"</div></div>
+    <div class="result-section"><div class="section-label">你的睡眠画像</div><div class="result-profile">${p.profile}</div></div>
+    <div class="result-section"><div class="section-label">3 个改善建议</div>${p.tips.map((t,i)=>`<div class="tip-card"><span class="tip-num">${i+1}</span><span class="tip-text">${t}</span></div>`).join('')}</div>
+    <div class="product-card"><div class="product-label">✦ ZENOASIS 悟昕如何帮助你</div><div class="product-desc">${p.product}</div></div>
+    <div class="result-actions"><button class="btn-share" onclick="genShare()">📤 生成分享卡片</button><button class="btn-retake" onclick="retake()">重新测试</button></div>
+    <div class="disclaimer">本测试仅供健康科普参考，不构成医疗诊断或治疗建议</div>`;
+}
+function retake(){answers=[];currentQuestion=0;showPage('page-welcome','back')}
+
+/* ═══ SHARE CARD ═══ */
+function genShare(){
+  const ov=document.getElementById('share-overlay'),cv=document.getElementById('share-canvas'),ctx=cv.getContext('2d');
+  const W=750,H=1334;cv.width=W;cv.height=H;
+  const p=resultPersonality;if(!p)return;
+  // bg
+  const bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#0B0F1E');bg.addColorStop(.5,'#121836');bg.addColorStop(1,'#1a1040');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  // glow
+  const g1=ctx.createRadialGradient(600,200,0,600,200,300);g1.addColorStop(0,'rgba(124,58,237,.12)');g1.addColorStop(1,'transparent');ctx.fillStyle=g1;ctx.fillRect(0,0,W,H);
+  const g2=ctx.createRadialGradient(150,900,0,150,900,250);g2.addColorStop(0,'rgba(59,130,246,.08)');g2.addColorStop(1,'transparent');ctx.fillStyle=g2;ctx.fillRect(0,0,W,H);
+  // brand
+  ctx.textAlign='center';ctx.fillStyle='rgba(167,139,250,.5)';ctx.font='500 24px "Noto Sans SC",sans-serif';ctx.fillText('Z E N O A S I S',W/2,80);
+  ctx.fillStyle='rgba(167,139,250,.3)';ctx.font='300 18px "Noto Sans SC",sans-serif';ctx.fillText('悟昕科技',W/2,112);
+  // line
+  ctx.strokeStyle='rgba(167,139,250,.15)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2-60,140);ctx.lineTo(W/2+60,140);ctx.stroke();
+  // emoji
+  ctx.font='120px serif';ctx.textAlign='center';ctx.fillText(p.emoji,W/2,320);
+  // name
+  ctx.fillStyle='#F1F0FB';ctx.font='900 64px "Noto Sans SC",sans-serif';ctx.fillText(p.name,W/2,430);
+  // tagline
+  ctx.fillStyle='rgba(241,240,251,.65)';ctx.font='400 28px "Noto Sans SC",sans-serif';ctx.fillText('"'+p.tagline+'"',W/2,490);
+  // divider
+  const dg=ctx.createLinearGradient(W/2-80,0,W/2+80,0);dg.addColorStop(0,'transparent');dg.addColorStop(.5,'rgba(167,139,250,.3)');dg.addColorStop(1,'transparent');ctx.strokeStyle=dg;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(W/2-80,530);ctx.lineTo(W/2+80,530);ctx.stroke();
+  // profile
+  ctx.fillStyle='rgba(241,240,251,.7)';ctx.font='400 26px "Noto Sans SC",sans-serif';ctx.textAlign='left';
+  wrapT(ctx,p.profile,80,590,W-160,42);
+  // tips
+  let ty=920;ctx.fillStyle='rgba(167,139,250,.6)';ctx.font='700 20px "Noto Sans SC",sans-serif';ctx.textAlign='left';ctx.fillText('💡 改善建议',80,ty);ty+=45;
+  ctx.fillStyle='rgba(241,240,251,.65)';ctx.font='400 24px "Noto Sans SC",sans-serif';
+  p.tips.forEach((t,i)=>{const ls=wrapL(ctx,(i+1)+'. '+t,W-180,36);ls.forEach(l=>{ctx.fillText(l,100,ty);ty+=36});ty+=10});
+  // bottom
+  const bg2=ctx.createLinearGradient(0,H-180,0,H);bg2.addColorStop(0,'transparent');bg2.addColorStop(1,'rgba(11,15,30,.8)');ctx.fillStyle=bg2;ctx.fillRect(0,H-180,W,180);
+  ctx.textAlign='center';ctx.fillStyle='rgba(167,139,250,.4)';ctx.font='400 22px "Noto Sans SC",sans-serif';ctx.fillText('测测你的睡眠人格 →',W/2,H-100);
+  ctx.fillStyle='rgba(167,139,250,.25)';ctx.font='300 18px "Noto Sans SC",sans-serif';ctx.fillText('ZENOASIS · 悟昕AI智能睡眠仪',W/2,H-65);
+  ov.classList.add('visible');
+}
+function wrapT(ctx,t,x,y,mw,lh){const cs=t.split('');let l='',ly=y;for(let i=0;i<cs.length;i++){const tl=l+cs[i];if(ctx.measureText(tl).width>mw&&i>0){ctx.fillText(l,x,ly);l=cs[i];ly+=lh}else l=tl}ctx.fillText(l,x,ly)}
+function wrapL(ctx,t,mw){const cs=t.split('');let l='';const ls=[];for(let i=0;i<cs.length;i++){const tl=l+cs[i];if(ctx.measureText(tl).width>mw&&i>0){ls.push(l);l=cs[i]}else l=tl}if(l)ls.push(l);return ls}
+function closeShare(){document.getElementById('share-overlay').classList.remove('visible')}
+
+document.addEventListener('DOMContentLoaded',initParticles);
+</script>
+</body>
+</html>
