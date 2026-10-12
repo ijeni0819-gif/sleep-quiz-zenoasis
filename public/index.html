@@ -129,6 +129,48 @@ body{background:linear-gradient(165deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#1a10
 .btn-wvdian:active{transform:scale(.97)}
 #toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%) translateY(20px);padding:10px 22px;border-radius:10px;background:rgba(15,23,42,.92);border:1px solid var(--glass-border);color:var(--text-primary);font-size:13px;z-index:200;opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap}
 #toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+/* ═══ PERSONA TEASER GRID ═══ */
+.teaser-label{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--purple-light);text-align:center;margin-top:34px;animation:fadeUp .6s .3s both}
+.persona-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.persona-chip{padding:16px 4px 13px;border-radius:14px;background:var(--glass-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--glass-border);text-align:center;animation:chipIn .5s cubic-bezier(.22,1,.36,1) both}
+.persona-chip:nth-child(1){animation-delay:.35s}.persona-chip:nth-child(2){animation-delay:.43s}.persona-chip:nth-child(3){animation-delay:.51s}
+.persona-chip:nth-child(4){animation-delay:.59s}.persona-chip:nth-child(5){animation-delay:.67s}.persona-chip:nth-child(6){animation-delay:.75s}
+.pc-emoji{font-size:27px;line-height:1}
+.pc-name{font-size:11px;font-weight:500;color:var(--text-secondary);margin-top:7px;letter-spacing:.5px}
+@keyframes chipIn{from{opacity:0;transform:translateY(14px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.meta-line{text-align:center;font-size:12px;color:var(--text-muted);margin-top:22px;animation:fadeUp .6s .85s both}
+.meta-line b{color:var(--purple-light);font-weight:500}
+
+/* ═══ REVEAL ANIMATION ═══ */
+.reveal{opacity:0;transform:translateY(18px);animation:revealUp .7s cubic-bezier(.22,1,.36,1) both}
+@keyframes revealUp{to{opacity:1;transform:translateY(0)}}
+.result-hero .result-emoji.reveal{animation:emojiPop .8s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes emojiPop{from{opacity:0;transform:scale(.2) rotate(-14deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+
+/* ═══ SEVERITY + SECONDARY ═══ */
+.sev-chip{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:7px 16px;border-radius:999px;background:rgba(124,58,237,.14);border:1px solid rgba(167,139,250,.3);animation:fadeUp .6s both}
+.sev-chip .sev-label{font-size:11px;color:var(--text-secondary);letter-spacing:1px}
+.sev-chip .sev-stars{font-size:13px;letter-spacing:2px;color:var(--accent-yellow);text-shadow:0 0 8px rgba(254,228,64,.35)}
+.secondary-card{margin-top:14px;padding:16px 18px;border-radius:14px;background:var(--glass-bg);border:1px dashed rgba(167,139,250,.35);animation:fadeUp .6s both}
+.secondary-card .sc-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--accent-cyan);margin-bottom:6px}
+.secondary-card .sc-name{font-size:15px;font-weight:700}
+.secondary-card .sc-emoji{font-size:15px;margin-right:6px}
+.secondary-card .sc-tag{font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5}
+
+/* ═══ DIMENSION BARS ═══ */
+.dim-chart{padding:20px 18px 8px;border-radius:16px;background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border)}
+.dim-row{margin-bottom:14px}
+.dim-row:last-child{margin-bottom:6px}
+.dim-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.dim-name{font-size:12.5px;font-weight:500;color:var(--text-secondary)}
+.dim-row.win .dim-name{color:var(--text-primary);font-weight:700}
+.dim-pct{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.dim-row.win .dim-pct{color:var(--accent-cyan);font-weight:700}
+.dim-bar-track{height:7px;border-radius:4px;background:rgba(167,139,250,.1);overflow:hidden}
+.dim-bar{height:100%;border-radius:4px;width:0;background:rgba(167,139,250,.35);transition:width 1s cubic-bezier(.22,1,.36,1);transition-delay:var(--d,0s)}
+.dim-row.win .dim-bar{background:linear-gradient(90deg,var(--purple-mid),var(--accent-cyan));box-shadow:0 0 10px rgba(124,58,237,.45)}
+
 </style>
 </head>
 <body>
@@ -147,11 +189,16 @@ body{background:linear-gradient(165deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#1a10
       <h1 class="hero-title">你的睡眠人格<br>是什么？</h1>
       <p class="hero-sub">10 个小问题，找到你专属的睡眠画像<br>以及属于你的改善方案</p>
     </div>
-    <div class="welcome-meta">
-      <div class="meta-item"><div class="meta-num">10</div><div class="meta-label">道题目</div></div>
-      <div class="meta-item"><div class="meta-num">2</div><div class="meta-label">分钟完成</div></div>
-      <div class="meta-item"><div class="meta-num">6</div><div class="meta-label">种人格</div></div>
+    <div class="teaser-label">6 种睡眠人格，你是哪一种？</div>
+    <div class="persona-grid">
+      <div class="persona-chip"><div class="pc-emoji">🌙</div><div class="pc-name">报复性熬夜冠军</div></div>
+      <div class="persona-chip"><div class="pc-emoji">🎬</div><div class="pc-name">深夜编剧</div></div>
+      <div class="persona-chip"><div class="pc-emoji">📡</div><div class="pc-name">人形声呐</div></div>
+      <div class="persona-chip"><div class="pc-emoji">⏰</div><div class="pc-name">再睡五分钟大师</div></div>
+      <div class="persona-chip"><div class="pc-emoji">💼</div><div class="pc-name">深夜值班员</div></div>
+      <div class="persona-chip"><div class="pc-emoji">🔋</div><div class="pc-name">虚电体质</div></div>
     </div>
+    <div class="meta-line"><b>10 题</b> · 约 2 分钟 · 出你的专属睡眠报告</div>
     <div class="welcome-cta">
       <button class="btn-primary" onclick="startQuiz()">开始测试</button>
     </div>
@@ -200,55 +247,55 @@ var _hmt=_hmt||[];
 (function(){if(!CONFIG.BAIDU_HM_ID)return;var hm=document.createElement('script');hm.src='https://hm.baidu.com/hm.js?'+CONFIG.BAIDU_HM_ID;var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(hm,s);})();
 function track(cat,act,label){try{_hmt.push(['_trackEvent',cat,act,label])}catch(e){}}
 const QUESTIONS=[
-  {q:"你通常几点睡觉？",opts:["22:00 之前","22:00 – 24:00","24:00 – 2:00","凌晨 2:00 以后"],
+  {q:"你通常几点睡觉？",opts:["22:00 前，养生选手到点就困","22:00 – 24:00，标准区间","24:00 – 2:00，夜才刚刚开始","凌晨 2:00 后，天亮说晚安"],
    scores:[[0,0,0,0,0,1],[0,0,0,1,0,0],[3,0,0,0,1,1],[5,1,0,0,0,1]]},
-  {q:"躺在床上后，你一般多久能睡着？",opts:["10 分钟以内","10 – 30 分钟","30 – 60 分钟","超过 1 小时"],
+  {q:"躺在床上后，你一般多久能睡着？",opts:["10 分钟内，头挨枕头就没知觉","10 – 30 分钟，正常发挥","30 – 60 分钟，翻来覆去找姿势","超过 1 小时，越努力越清醒"],
    scores:[[0,0,0,0,0,1],[0,0,1,1,0,0],[1,1,0,0,3,1],[2,2,0,0,3,1]]},
-  {q:"夜里你会醒来几次？",opts:["基本不醒","醒 1 次，很快能再睡","醒 1–2 次，要好一会儿才睡着","经常醒，翻来覆去"],
+  {q:"夜里你会醒来几次？",opts:["基本不醒，一觉到天亮","醒 1 次，翻个身接着睡","醒 1–2 次，再睡回去全靠运气","经常醒，整个夜都是碎的"],
    scores:[[0,0,0,0,0,0],[0,0,1,1,0,0],[0,0,3,1,1,1],[0,0,5,1,1,2]]},
-  {q:"睡前你最常做什么？",opts:["看书 / 听音乐 / 泡脚","刷刷手机，会控制时间","刷手机 / 追剧，停不下来","工作 / 回消息 / 想事情"],
+  {q:"睡前你最常做什么？",opts:["看书 / 听音乐 / 泡脚，仪式感拉满","刷刷手机，但有分寸","刷手机 / 追剧，根本停不下来","工作 / 回消息 / 脑子里开会"],
    scores:[[0,0,0,0,0,0],[1,0,0,0,0,1],[3,0,0,0,1,1],[1,3,0,0,3,1]]},
-  {q:"躺下后，你的脑子安静吗？",opts:["很快就能放空","会想一些事，但能慢慢平静","各种事情转来转去","完全停不下来，越想越清醒"],
+  {q:"躺下后，你的脑子安静吗？",opts:["秒放空，大脑很配合","会想点事，但能慢慢关机","白天的事自动循环播放","越躺越清醒，大脑在开演唱会"],
    scores:[[0,0,0,0,0,0],[0,1,0,0,0,1],[2,3,0,0,2,1],[3,5,0,0,3,1]]},
-  {q:"早上起来你觉得精神怎么样？",opts:["精神饱满","还行，需要缓一会儿","明显没睡够","越睡越累"],
+  {q:"早上起来你觉得精神怎么样？",opts:["满血复活","缓一会儿才能开机","明显没睡够，电量只剩 60%","越睡越累，像没睡过"],
    scores:[[0,0,0,0,0,0],[0,0,0,1,0,1],[0,0,3,3,1,3],[0,0,2,3,1,5]]},
-  {q:"你白天需要靠什么撑过一天？",opts:["不太需要","下午来杯咖啡","全靠咖啡续命","咖啡 + 午睡，缺一不可"],
+  {q:"你白天需要靠什么撑过一天？",opts:["天赋异禀，不需要外挂","下午一杯咖啡，正常操作","全靠咖啡续命","咖啡 + 午睡，双保险缺一不可"],
    scores:[[0,0,0,0,0,0],[0,0,0,2,0,1],[0,0,1,3,1,2],[0,0,1,5,1,3]]},
-  {q:"你的作息规律吗？",opts:["非常规律，每天差不多","工作日规律，周末会晚睡","差不多，偶尔不规律","完全看心情，没有固定时间"],
+  {q:"你的作息规律吗？",opts:["非常规律，生物钟比闹钟还准","工作日规律，周末放飞","一般规律，偶尔失控","完全看心情，闹钟都猜不到我几点起"],
    scores:[[0,0,0,0,0,0],[1,0,0,1,0,1],[1,0,0,1,0,2],[4,1,0,1,0,2]]},
-  {q:"你觉得自己睡眠最大的困扰是什么？",opts:["没什么困扰","入睡太慢","睡太浅 / 容易醒","睡很久还是累"],
+  {q:"你觉得自己睡眠最大的困扰是什么？",opts:["没什么困扰，睡觉是我的天赋","入睡太慢","睡太浅 / 容易醒","睡很久还是累"],
    scores:[[0,0,0,0,0,0],[1,1,0,0,2,0],[0,0,4,1,1,1],[0,0,1,2,0,5]]},
-  {q:"如果有一种超能力你最想要——",opts:["沾枕头就睡着","一觉到天亮不醒","睡 4 小时 = 睡 8 小时","随时随地秒睡"],
+  {q:"如果有一种超能力你最想要——",opts:["沾枕头就着，一秒断电","一觉到天亮，中途不失忆","睡 4 小时 = 睡 8 小时","随时随地秒睡，交通工具除外"],
    scores:[[0,1,0,0,2,0],[0,0,3,1,1,1],[1,0,1,3,0,4],[4,1,0,1,2,2]]}
 ];
 
 const PERSONALITIES=[
-  {id:"nightowl",emoji:"🌙",name:"夜行者",tagline:"你的生物钟，被调到了另一个时区",color1:"#7C3AED",color2:"#3B82F6",
+  {id:"nightowl",emoji:"🌙",name:"报复性熬夜冠军",tagline:"我不是睡不着，我是舍不得睡",color1:"#7C3AED",color2:"#3B82F6",
    profile:"你不爱早睡，不是因为不困，而是因为夜晚让你觉得自由。白天的喧嚣退去后，你终于有了属于自己的时间。这种“报复性熬夜”其实是一种心理补偿——你在用清醒守护白天被压缩的自我。但长期下来，生物钟的后移让你越来越难在“正常时间”入睡，形成了恶性循环。",
    tips:["每天提前 15 分钟上床，用渐进式调整替代强制早睡","睡前 1 小时调暗灯光，给大脑发送“该休息了”的信号","白天多接触自然光，帮助校准你的生物钟"],
    product:"悟昕的脑电监测可以帮你了解自己真实的入睡窗口期，配合 CES 干预和舒缓音波，在你最可能入睡的时间段创造理想的睡眠条件。"},
-  {id:"overthinker",emoji:"🧠",name:"思考者",tagline:"你的大脑，在该关机的时候还在全速运转",color1:"#8B5CF6",color2:"#F15BB5",
+  {id:"overthinker",emoji:"🎬",name:"深夜编剧",tagline:"白天没回放完的事，大脑在床上逐帧续播",color1:"#8B5CF6",color2:"#F15BB5",
    profile:"躺下是你一天中最忙的时刻。白天没来得及想的事，晚上全部涌上来。你会反复回放今天的对话，提前焦虑明天的任务，甚至开始思考人生的意义。你的大脑像一台没有关机键的电脑，即使身体已经很疲惫了，思维却越来越活跃。",
    tips:["睡前做一次“大脑清空”——把想法写在纸上，告诉自己明天再处理","尝试 4-7-8 呼吸法：吸气 4 秒，屏息 7 秒，呼气 8 秒","用白噪音或冥想音频作为“思维锚点”，让注意力有处安放"],
    product:"悟昕的音波干预功能可以播放经过设计的舒缓音频，帮助你的大脑从 β 波（活跃状态）过渡到 α 波和 θ 波（放松和入睡状态），让你不再和自己的思绪搏斗。"},
-  {id:"lightsleeper",emoji:"📡",name:"雷达体质",tagline:"你的睡眠系统，24小时不关机",color1:"#22D3EE",color2:"#3B82F6",
+  {id:"lightsleeper",emoji:"📡",name:"人形声呐",tagline:"全屋最轻的动静，都能把你从睡眠里拽出来",color1:"#22D3EE",color2:"#3B82F6",
    profile:"你的睡眠像守夜人值班——永远留着一只耳朵。室友翻身、窗外的车声、甚至空调风向变了，你的大脑都会立刻弹出警报。更要命的是，你一旦醒了就很难再睡回去，因为你的警觉系统已经彻底上线了。你不是睡不着，你是“不敢睡死”。长期下来，你的深睡比例被严重压缩，身体一直在“半休息”状态，睡多久都不解乏。",
    tips:["入睡时播放持续的白噪音（雨声/风扇声），用稳定的声音“覆盖”突发噪音","醒来后绝对不看手机，闭眼做3次深呼吸，让大脑重新启动睡眠模式","白天做30分钟中等强度运动（快走/游泳），提升深睡比例，但睡前3小时别运动"],
    product:"悟昕的脑电监测可以精确追踪你的深睡比例——也许你会发现，自己的深睡只占了不到 15%。配合 CES 微电流干预，帮助大脑从浅睡“沉下去”，睡得更稳、更沉。"},
-  {id:"alarmwarrior",emoji:"⏰",name:"闹钟战士",tagline:"你不是没睡够，你是没睡对",color1:"#F59E0B",color2:"#EF4444",
+  {id:"alarmwarrior",emoji:"⏰",name:"再睡五分钟大师",tagline:"闹钟响八次，就是八个独立的五分钟",color1:"#F59E0B",color2:"#EF4444",
    profile:"你每天被闹钟从梦中拽出来，靠意志力把自己从床上拖起来。白天像行尸走肉一样靠咖啡撑着，到了下午就开始犯困。你可能觉得自己只是“没睡够”，但问题可能不在时间长短——你的睡眠质量本身就不高，深睡太少，浅睡太多，身体一直在“半休息”状态。",
    tips:["关注睡眠质量而非时长，7 小时高质量睡眠胜过 10 小时低质量","用固定起床时间（包括周末）来稳定生物钟","睡前避免酒精，它会严重破坏深睡结构"],
    product:"悟昕可以帮你量化深睡比例和睡眠效率，通过智能干预提升深睡质量。很多用户反馈，在使用一段时间后，起床时的清醒感明显改善，不再那么依赖闹钟。"},
-  {id:"tenseone",emoji:"🔒",name:"锁死型",tagline:"你的身体在下班，但你的肌肉还在加班",color1:"#EC4899",color2:"#8B5CF6",
+  {id:"tenseone",emoji:"💼",name:"深夜值班员",tagline:"人已经躺平，肌肉还在加班",color1:"#EC4899",color2:"#8B5CF6",
    profile:"你躺在了床上，但你的身体拒绝配合。肩膀扛着白天的会议，下颌咬着没说出口的话，后背弓着维持了一天的姿势。你自己可能都没意识到——你的神经系统还卡在“战斗”模式里，肾上腺素还没下班。心跳比躺着应有的速度快那么一点，体温偏高，肌肉不自觉绷紧。你以为自己在休息，其实只是换了个地方继续消耗。",
    tips:["睡前花5分钟做“渐进式肌肉放松”：从脚趾开始，先绷紧5秒再松开，逐个部位往上做","睡前1小时洗个热水澡，让体温先升后降，身体会自然产生困意","把“信息断食”纳入睡前流程：放下手机、关掉电视，给神经系统一个缓冲期"],
    product:"悟昕的 CES（经皮电刺激）可以温和地激活副交感神经，帮你把身体从“紧绷”切到“放松”。配合呼吸引导音频，先让身体松下来，大脑才会跟着安静。"},
-  {id:"daytimezombie",emoji:"🔋",name:"待机型",tagline:"你的睡眠一直在充电，但电量永远不满",color1:"#6366F1",color2:"#22D3EE",
+  {id:"daytimezombie",emoji:"🔋",name:"虚电体质",tagline:"睡了 8 小时，开机电量只有 30%",color1:"#6366F1",color2:"#22D3EE",
    profile:"你的睡眠时长不短，7、8个小时是常态，但醒来就像手机一整夜插着充电器、电量却卡在40%——时间花了，电没充满。问题出在你的睡眠结构上：浅睡占比太高，深睡和REM睡眠被严重挤占。这两个阶段才是身体真正修复、记忆巩固、情绪调节的关键。你缺的不是睡眠时间，是睡眠里的“硬核内容”。",
    tips:["固定起床时间（包括周末），比多睡2小时更能优化睡眠结构","睡前3小时停止摄入咖啡因和酒精——酒精尤其会破坏深睡","把卧室温度控制在18-22°C，凉爽环境是深睡的最佳搭档"],
    product:"悟昕的脑电监测可以量化你的深睡和REM比例，让你第一次“看见”自己睡眠的真实结构。配合智能干预方案，帮你把“无效时长”变成“有效修复”。"}];
 
-let currentPage='welcome',currentQuestion=0,answers=[],resultPersonality=null;
+let currentPage='welcome',currentQuestion=0,answers=[],resultPersonality=null,resultData=null;
 
 /* ═══ PARTICLES ═══ */
 function initParticles(){
@@ -312,24 +359,74 @@ function goToQ(i){
 function calcResult(){
   const t=[0,0,0,0,0,0];
   QUESTIONS.forEach((q,qi)=>{const a=answers[qi];if(a!==undefined&&q.scores[a])q.scores[a].forEach((s,pi)=>{t[pi]+=s})});
-  let mx=-1,mi=0;t.forEach((s,i)=>{if(s>mx){mx=s;mi=i}});
-  return PERSONALITIES[mi];
+  let mi=0;t.forEach((s,i)=>{if(s>t[mi])mi=i});
+  const order=[...t.keys()].sort((a,b)=>t[b]-t[a]);
+  const total=t.reduce((a,b)=>a+b,0);
+  const sev=total>=45?5:total>=31?4:total>=18?3:2;
+  return{p:PERSONALITIES[mi],totals:t,mi,secondary:order[1],sev,total};
 }
 
 /* ═══ LOADING & RESULT ═══ */
 function showLoading(){
   showPage('page-loading','forward');
-  setTimeout(()=>{resultPersonality=calcResult();track('quiz','complete','finish');renderResult(resultPersonality);showPage('page-result','forward')},2800);
+  setTimeout(()=>{resultData=calcResult();resultPersonality=resultData.p;track('quiz','complete','finish');renderResult(resultData);showPage('page-result','forward')},2800);
 }
-function renderResult(p){
+function renderResult(rd){
+  const p=rd.p;
   track('result','personality',p.name);
+  const max=rd.totals[rd.mi]||1;
+  const stars='\u2605'.repeat(rd.sev)+'\u2606'.repeat(5-rd.sev);
+  const sec=PERSONALITIES[rd.secondary];
+  const secShow=rd.totals[rd.secondary]>0;
+  const bars=PERSONALITIES.map((pp,i)=>{
+    const pct=Math.round(rd.totals[i]/max*100);
+    const isWin=i===rd.mi;
+    return `<div class="dim-row${isWin?' win':''}" style="animation-delay:${(.9+i*.12).toFixed(2)}s">
+      <div class="dim-head"><span class="dim-name">${pp.emoji} ${pp.name}</span><span class="dim-pct">${pct}%</span></div>
+      <div class="dim-bar-track"><div class="dim-bar" data-w="${pct}" style="--d:${(1.0+i*.12).toFixed(2)}s"></div></div>
+    </div>`;
+  }).join('');
   document.getElementById('page-result').innerHTML=`
-    <div class="result-hero"><div class="result-emoji">${p.emoji}</div><div class="result-name">${p.name}</div><div class="result-tagline">"${p.tagline}"</div></div>
-    <div class="result-section"><div class="section-label">你的睡眠画像</div><div class="result-profile">${p.profile}</div></div>
-    <div class="result-section"><div class="section-label">3 个改善建议</div>${p.tips.map((t,i)=>`<div class="tip-card"><span class="tip-num">${i+1}</span><span class="tip-text">${t}</span></div>`).join('')}</div>
-    <div class="product-card"><div class="product-label">✦ ZENOASIS 悟昕如何帮助你</div><div class="product-desc">${p.product}</div></div>
-    <div class="result-actions"><button class="btn-share" onclick="genShare()">📤 生成分享卡片</button><button class="btn-wvdian" onclick="openWvdian()">🛒 查看适合你的改善方案</button><button class="btn-retake" onclick="retake()">重新测试</button></div>
+    <div class="result-hero">
+      <div class="result-emoji reveal" style="animation-delay:.15s">${p.emoji}</div>
+      <div class="result-name reveal" style="animation-delay:.35s">${p.name}</div>
+      <div class="result-tagline reveal" style="animation-delay:.55s">“${p.tagline}”</div>
+      <div class="sev-chip" style="animation-delay:.7s"><span class="sev-label">睡眠内耗指数</span><span class="sev-stars">${stars}</span></div>
+    </div>
+
+    <div class="result-section reveal" style="animation-delay:.8s">
+      <div class="section-label">你的睡眠光谱</div>
+      <div class="dim-chart">${bars}</div>
+      ${secShow?`<div class="secondary-card" style="animation-delay:1.6s">
+        <div class="sc-label">隐藏人格</div>
+        <div><span class="sc-emoji">${sec.emoji}</span><span class="sc-name">${sec.name}</span></div>
+        <div class="sc-tag">${sec.tagline}</div>
+      </div>`:''}
+    </div>
+
+    <div class="result-section reveal" style="animation-delay:1.15s">
+      <div class="section-label">你的睡眠画像</div>
+      <div class="result-profile">${p.profile}</div>
+    </div>
+
+    <div class="result-section reveal" style="animation-delay:1.3s">
+      <div class="section-label">3 个改善建议</div>
+      ${p.tips.map((t,i)=>`<div class="tip-card"><span class="tip-num">${i+1}</span><span class="tip-text">${t}</span></div>`).join('')}
+    </div>
+
+    <div class="product-card reveal" style="animation-delay:1.45s">
+      <div class="product-label">✦ ZENOASIS 悟昕如何帮助你</div>
+      <div class="product-desc">${p.product}</div>
+    </div>
+
+    <div class="result-actions reveal" style="animation-delay:1.6s">
+      <button class="btn-share" onclick="genShare()">📤 生成分享卡片</button>
+      <button class="btn-wvdian" onclick="openWvdian()">🛒 查看适合你的改善方案</button>
+      <button class="btn-retake" onclick="retake()">重新测试</button>
+    </div>
+
     <div class="disclaimer">本测试仅供健康科普参考，不构成医疗诊断或治疗建议</div>`;
+  setTimeout(()=>{document.querySelectorAll('#page-result .dim-bar').forEach(b=>{b.style.width=b.dataset.w+'%'})},120);
 }
 function retake(){track('quiz','retake','back');answers=[];currentQuestion=0;showPage('page-welcome','back')}
 
