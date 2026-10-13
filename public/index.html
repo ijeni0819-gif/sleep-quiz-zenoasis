@@ -171,6 +171,15 @@ body{background:linear-gradient(165deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#1a10
 .dim-bar{height:100%;border-radius:4px;width:0;background:rgba(167,139,250,.35);transition:width 1s cubic-bezier(.22,1,.36,1);transition-delay:var(--d,0s)}
 .dim-row.win .dim-bar{background:linear-gradient(90deg,var(--purple-mid),var(--accent-cyan));box-shadow:0 0 10px rgba(124,58,237,.45)}
 
+/* ═══ Q9 "其他" 输入框 ═══ */
+.q-other-input{margin-top:14px;opacity:0;transform:translateY(8px);transition:all .3s ease}
+.q-other-input.visible{opacity:1;transform:translateY(0)}
+.q-other-input textarea{width:100%;padding:14px 16px;border:1.5px solid var(--glass-border);border-radius:12px;background:var(--glass-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--text-primary);font-size:14px;font-family:inherit;line-height:1.6;resize:none;box-sizing:border-box}
+.q-other-input textarea::placeholder{color:var(--text-muted)}
+.q-other-input textarea:focus{outline:none;border-color:var(--purple-mid);background:rgba(124,58,237,.08)}
+.q-next-btn{margin-top:10px;width:100%;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--purple-mid),var(--blue-mid));color:#fff;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:transform .2s,box-shadow .3s;box-shadow:0 4px 16px rgba(124,58,237,.25)}
+.q-next-btn:active{transform:scale(.97)}
+
 </style>
 </head>
 <body>
@@ -263,8 +272,8 @@ const QUESTIONS=[
    scores:[[0,0,0,0,0,0],[0,0,0,2,0,1],[0,0,1,3,1,2],[0,0,1,5,1,3]]},
   {q:"你的作息规律吗？",opts:["非常规律，生物钟比闹钟还准","工作日规律，周末放飞","一般规律，偶尔失控","完全看心情，闹钟都猜不到我几点起"],
    scores:[[0,0,0,0,0,0],[1,0,0,1,0,1],[1,0,0,1,0,2],[4,1,0,1,0,2]]},
-  {q:"你觉得自己睡眠最大的困扰是什么？",opts:["没什么困扰，睡觉是我的天赋","入睡太慢","睡太浅 / 容易醒","睡很久还是累"],
-   scores:[[0,0,0,0,0,0],[1,1,0,0,2,0],[0,0,4,1,1,1],[0,0,1,2,0,5]]},
+  {q:"你觉得自己睡眠最大的困扰是什么？",opts:["没什么困扰，睡觉是我的天赋","入睡太慢","睡太浅 / 容易醒","睡很久还是累","其他（我的困扰不在以上选项）"],
+   scores:[[0,0,0,0,0,0],[1,1,0,0,2,0],[0,0,4,1,1,1],[0,0,1,2,0,5],[0,0,0,0,0,0]]},
   {q:"如果有一种超能力你最想要——",opts:["沾枕头就着，一秒断电","一觉到天亮，中途不失忆","睡 4 小时 = 睡 8 小时","随时随地秒睡，交通工具除外"],
    scores:[[0,1,0,0,2,0],[0,0,3,1,1,1],[1,0,1,3,0,4],[4,1,0,1,2,2]]}
 ];
@@ -295,7 +304,7 @@ const PERSONALITIES=[
    tips:["固定起床时间（包括周末），比多睡2小时更能优化睡眠结构","睡前3小时停止摄入咖啡因和酒精——酒精尤其会破坏深睡","把卧室温度控制在18-22°C，凉爽环境是深睡的最佳搭档"],
    product:"悟昕的脑电监测可以量化你的深睡和REM比例，让你第一次“看见”自己睡眠的真实结构。配合智能干预方案，帮你把“无效时长”变成“有效修复”。"}];
 
-let currentPage='welcome',currentQuestion=0,answers=[],resultPersonality=null,resultData=null;
+let currentPage='welcome',currentQuestion=0,answers=[],resultPersonality=null,resultData=null;window.__q9Others=window.__q9Others||[];
 
 /* ═══ PARTICLES ═══ */
 function initParticles(){
@@ -346,7 +355,24 @@ function buildQuiz(){
 function selectOpt(qi,oi,btn){
   const sibs=btn.parentElement.querySelectorAll('.option-btn');sibs.forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');
   answers[qi]=oi;track('quiz','answer','Q'+(qi+1));
+  if(qi===8){
+    const old=document.getElementById('q9-textarea-wrap');if(old)old.remove();
+    if(oi===4){setTimeout(showQ9Textarea,80);return}
+  }
   setTimeout(()=>{qi<QUESTIONS.length-1?goToQ(qi+1):showLoading()},350);
+}
+function showQ9Textarea(){
+  if(document.getElementById('q9-textarea-wrap'))return;
+  const opts=document.querySelector('#page-q8 .option-list');
+  const wrap=document.createElement('div');wrap.id='q9-textarea-wrap';wrap.className='q-other-input';
+  wrap.innerHTML='<textarea id="q9-other-text" placeholder="简单描述下你的困扰（选填，最多 200 字）" maxlength="200" rows="3"></textarea><button class="q-next-btn" onclick="submitQ9()">下一题 →</button>';
+  opts.appendChild(wrap);setTimeout(()=>wrap.classList.add('visible'),50);
+}
+function submitQ9(){
+  const text=(document.getElementById('q9-other-text')?.value||'').trim();
+  if(text){window.__q9Others.push({t:Date.now(),text});}
+  track('quiz','q9_other',text?'filled':'empty');
+  goToQ(9);
 }
 function goToQ(i){
   currentQuestion=i;
