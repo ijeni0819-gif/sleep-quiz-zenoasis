@@ -136,6 +136,8 @@ body{background:linear-gradient(165deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#1a10
 .persona-chip:nth-child(1){animation-delay:.35s}.persona-chip:nth-child(2){animation-delay:.43s}.persona-chip:nth-child(3){animation-delay:.51s}
 .persona-chip:nth-child(4){animation-delay:.59s}.persona-chip:nth-child(5){animation-delay:.67s}.persona-chip:nth-child(6){animation-delay:.75s}
 .pc-emoji{font-size:27px;line-height:1}
+.persona-chip.mystery{grid-column:1/-1;border-style:dashed;background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.3)}
+.persona-chip.mystery .pc-name{color:rgba(52,211,153,.8)}
 .pc-name{font-size:11px;font-weight:500;color:var(--text-secondary);margin-top:7px;letter-spacing:.5px}
 @keyframes chipIn{from{opacity:0;transform:translateY(14px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -198,7 +200,7 @@ body{background:linear-gradient(165deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#1a10
       <h1 class="hero-title">你的睡眠人格<br>是什么？</h1>
       <p class="hero-sub">10 个小问题，找到你专属的睡眠画像<br>以及属于你的改善方案</p>
     </div>
-    <div class="teaser-label">6 种睡眠人格，你是哪一种？</div>
+    <div class="teaser-label">6 种睡眠人格 + 1 个隐藏款，你是哪一种？</div>
     <div class="persona-grid">
       <div class="persona-chip"><div class="pc-emoji">🌙</div><div class="pc-name">报复性熬夜冠军</div></div>
       <div class="persona-chip"><div class="pc-emoji">🎬</div><div class="pc-name">深夜编剧</div></div>
@@ -206,6 +208,7 @@ body{background:linear-gradient(165deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#1a10
       <div class="persona-chip"><div class="pc-emoji">⏰</div><div class="pc-name">再睡五分钟大师</div></div>
       <div class="persona-chip"><div class="pc-emoji">💼</div><div class="pc-name">深夜值班员</div></div>
       <div class="persona-chip"><div class="pc-emoji">🔋</div><div class="pc-name">虚电体质</div></div>
+      <div class="persona-chip mystery"><div class="pc-emoji">❓</div><div class="pc-name">隐藏款 · 据说睡眠极好才能触发</div></div>
     </div>
     <div class="meta-line"><b>10 题</b> · 约 2 分钟 · 出你的专属睡眠报告</div>
     <div class="welcome-cta">
@@ -257,25 +260,25 @@ var _hmt=_hmt||[];
 function track(cat,act,label){try{_hmt.push(['_trackEvent',cat,act,label])}catch(e){}}
 const QUESTIONS=[
   {q:"你通常几点睡觉？",opts:["22:00 前，养生选手到点就困","22:00 – 24:00，标准区间","24:00 – 2:00，夜才刚刚开始","凌晨 2:00 后，天亮说晚安"],
-   scores:[[0,0,0,0,0,1],[0,0,0,1,0,0],[3,0,0,0,1,1],[5,1,0,0,0,1]]},
+   scores:[[0,0,0,0,0,0],[1,0,0,0,0,0],[3,0,0,0,0,0],[5,0,0,0,0,0]]},
   {q:"躺在床上后，你一般多久能睡着？",opts:["10 分钟内，头挨枕头就没知觉","10 – 30 分钟，正常发挥","30 – 60 分钟，翻来覆去找姿势","超过 1 小时，越努力越清醒"],
-   scores:[[0,0,0,0,0,1],[0,0,1,1,0,0],[1,1,0,0,3,1],[2,2,0,0,3,1]]},
+   scores:[[0,0,0,0,0,0],[0,1,0,0,1,0],[0,2,0,0,3,0],[0,3,0,0,4,0]]},
   {q:"夜里你会醒来几次？",opts:["基本不醒，一觉到天亮","醒 1 次，翻个身接着睡","醒 1–2 次，再睡回去全靠运气","经常醒，整个夜都是碎的"],
-   scores:[[0,0,0,0,0,0],[0,0,1,1,0,0],[0,0,3,1,1,1],[0,0,5,1,1,2]]},
+   scores:[[0,0,0,0,0,0],[0,0,2,0,0,0],[0,0,4,0,1,0],[0,0,5,0,1,1]]},
   {q:"睡前你最常做什么？",opts:["看书 / 听音乐 / 泡脚，仪式感拉满","刷刷手机，但有分寸","刷手机 / 追剧，根本停不下来","工作 / 回消息 / 脑子里开会"],
-   scores:[[0,0,0,0,0,0],[1,0,0,0,0,1],[3,0,0,0,1,1],[1,3,0,0,3,1]]},
+   scores:[[0,0,0,0,0,0],[1,0,0,0,0,0],[3,0,0,0,0,0],[0,3,0,0,3,0]]},
   {q:"躺下后，你的脑子安静吗？",opts:["秒放空，大脑很配合","会想点事，但能慢慢关机","白天的事自动循环播放","越躺越清醒，大脑在开演唱会"],
-   scores:[[0,0,0,0,0,0],[0,1,0,0,0,1],[2,3,0,0,2,1],[3,5,0,0,3,1]]},
+   scores:[[0,0,0,0,0,0],[0,1,0,0,0,0],[0,4,0,0,2,0],[0,5,0,0,3,0]]},
   {q:"早上起来你觉得精神怎么样？",opts:["满血复活","缓一会儿才能开机","明显没睡够，电量只剩 60%","越睡越累，像没睡过"],
-   scores:[[0,0,0,0,0,0],[0,0,0,1,0,1],[0,0,3,3,1,3],[0,0,2,3,1,5]]},
+   scores:[[0,0,0,0,0,0],[0,0,0,1,0,1],[0,0,2,2,0,2],[0,0,2,2,0,4]]},
   {q:"你白天需要靠什么撑过一天？",opts:["天赋异禀，不需要外挂","下午一杯咖啡，正常操作","全靠咖啡续命","咖啡 + 午睡，双保险缺一不可"],
-   scores:[[0,0,0,0,0,0],[0,0,0,2,0,1],[0,0,1,3,1,2],[0,0,1,5,1,3]]},
+   scores:[[0,0,0,0,0,0],[0,0,0,2,0,0],[0,0,0,4,0,1],[0,0,0,5,0,1]]},
   {q:"你的作息规律吗？",opts:["非常规律，生物钟比闹钟还准","工作日规律，周末放飞","一般规律，偶尔失控","完全看心情，闹钟都猜不到我几点起"],
-   scores:[[0,0,0,0,0,0],[1,0,0,1,0,1],[1,0,0,1,0,2],[4,1,0,1,0,2]]},
+   scores:[[0,0,0,0,0,0],[1,0,0,1,0,0],[2,0,0,1,0,0],[4,0,0,1,0,0]]},
   {q:"你觉得自己睡眠最大的困扰是什么？",opts:["没什么困扰，睡觉是我的天赋","入睡太慢","睡太浅 / 容易醒","睡很久还是累","其他（我的困扰不在以上选项）"],
-   scores:[[0,0,0,0,0,0],[1,1,0,0,2,0],[0,0,4,1,1,1],[0,0,1,2,0,5],[0,0,0,0,0,0]]},
+   scores:[[0,0,0,0,0,0],[0,2,0,0,3,0],[0,0,5,0,0,0],[0,0,1,1,0,5],[0,0,0,0,0,0]]},
   {q:"如果有一种超能力你最想要——",opts:["沾枕头就着，一秒断电","一觉到天亮，中途不失忆","睡 4 小时 = 睡 8 小时","随时随地秒睡，交通工具除外"],
-   scores:[[0,1,0,0,2,0],[0,0,3,1,1,1],[1,0,1,3,0,4],[4,1,0,1,2,2]]}
+   scores:[[0,1,0,0,2,0],[0,0,4,0,0,0],[0,0,0,2,0,3],[3,1,0,1,0,0]]}
 ];
 
 const PERSONALITIES=[
@@ -302,7 +305,11 @@ const PERSONALITIES=[
   {id:"daytimezombie",emoji:"🔋",name:"虚电体质",tagline:"睡了 8 小时，开机电量只有 30%",color1:"#6366F1",color2:"#22D3EE",
    profile:"你的睡眠时长不短，7、8个小时是常态，但醒来就像手机一整夜插着充电器、电量却卡在40%——时间花了，电没充满。问题出在你的睡眠结构上：浅睡占比太高，深睡和REM睡眠被严重挤占。这两个阶段才是身体真正修复、记忆巩固、情绪调节的关键。你缺的不是睡眠时间，是睡眠里的“硬核内容”。",
    tips:["固定起床时间（包括周末），比多睡2小时更能优化睡眠结构","睡前3小时停止摄入咖啡因和酒精——酒精尤其会破坏深睡","把卧室温度控制在18-22°C，凉爽环境是深睡的最佳搭档"],
-   product:"悟昕的脑电监测可以量化你的深睡和REM比例，让你第一次“看见”自己睡眠的真实结构。配合智能干预方案，帮你把“无效时长”变成“有效修复”。"}];
+   product:"悟昕的脑电监测可以量化你的深睡和REM比例，让你第一次“看见”自己睡眠的真实结构。配合智能干预方案，帮你把“无效时长”变成“有效修复”。"},
+  {id:"sleepgod",emoji:"😴",name:"睡眠天赋党",tagline:"躺下就睡，是我为数不多的超能力",color1:"#34D399",color2:"#22D3EE",
+   profile:"你可能无法理解别人的睡眠痛苦——头挨着枕头就断电，一觉到天亮，早上自然醒还精神饱满。在这个近四成成年人都睡不好的时代，这是实打实的稀缺天赋。不过天赋也不是永久的：作息漂移、睡前刷屏、压力累积，都会一点点把好睡眠偷走。你要做的不是修复，而是守护。",
+   tips:["保持现在的作息节奏——规律是这份天赋的保鲜剂","睡前半小时放下手机，别让蓝光慢慢偷走你的入睡速度","周末也尽量别大幅补觉，守住生物钟的稳定"],
+   product:"悟昕的脑电监测可以帮你把这份天赋数据化——每晚的深睡比例、REM 周期都看得见。了解自己的睡眠结构，才知道该怎么长期守护它。"}];
 
 let currentPage='welcome',currentQuestion=0,answers=[],resultPersonality=null,resultData=null;window.__q9Others=window.__q9Others||[];
 
@@ -388,8 +395,9 @@ function calcResult(){
   let mi=0;t.forEach((s,i)=>{if(s>t[mi])mi=i});
   const order=[...t.keys()].sort((a,b)=>t[b]-t[a]);
   const total=t.reduce((a,b)=>a+b,0);
-  const sev=total>=45?5:total>=31?4:total>=18?3:2;
-  return{p:PERSONALITIES[mi],totals:t,mi,secondary:order[1],sev,total};
+  const sev=total>=45?5:total>=31?4:total>=18?3:total>=8?2:1;
+  const isGod=total<=5;
+  return{p:isGod?PERSONALITIES[6]:PERSONALITIES[mi],totals:t,mi:isGod?-1:mi,secondary:order[1],sev:isGod?1:sev,total,isGod};
 }
 
 /* ═══ LOADING & RESULT ═══ */
@@ -400,13 +408,14 @@ function showLoading(){
 function renderResult(rd){
   const p=rd.p;
   track('result','personality',p.name);
-  const max=rd.totals[rd.mi]||1;
+
   const stars='\u2605'.repeat(rd.sev)+'\u2606'.repeat(5-rd.sev);
   const sec=PERSONALITIES[rd.secondary];
-  const secShow=rd.totals[rd.secondary]>0;
-  const bars=PERSONALITIES.map((pp,i)=>{
-    const pct=Math.round(rd.totals[i]/max*100);
-    const isWin=i===rd.mi;
+  const secShow=!rd.isGod&&rd.totals[rd.secondary]>0;
+  const maxScore=Math.max(...rd.totals,5);
+  const bars=PERSONALITIES.slice(0,6).map((pp,i)=>{
+    const pct=Math.round(rd.totals[i]/maxScore*100);
+    const isWin=!rd.isGod&&i===rd.mi;
     return `<div class="dim-row${isWin?' win':''}" style="animation-delay:${(.9+i*.12).toFixed(2)}s">
       <div class="dim-head"><span class="dim-name">${pp.emoji} ${pp.name}</span><span class="dim-pct">${pct}%</span></div>
       <div class="dim-bar-track"><div class="dim-bar" data-w="${pct}" style="--d:${(1.0+i*.12).toFixed(2)}s"></div></div>
